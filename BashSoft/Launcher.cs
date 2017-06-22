@@ -4,6 +4,7 @@
     {
         static void Main()
         {
+            IOManager.TraverseDirectory(@"D:\Zlatyo");
         }
     }
 }
