@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExceptionMessages.cs" />
     <Compile Include="IOManager.cs" />
     <Compile Include="Launcher.cs" />
     <Compile Include="OutputWriter.cs" />
