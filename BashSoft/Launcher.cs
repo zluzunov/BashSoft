@@ -4,8 +4,7 @@
     {
         static void Main()
         {
-            StudentsRepository.InitializeData();
-            StudentsRepository.GetStudentScoresFromCourse("Unity", "Ivan");
+            IOManager.TraverseDirectory(3);
         }
     }
 }
