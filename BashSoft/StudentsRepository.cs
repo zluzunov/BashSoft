@@ -57,5 +57,33 @@
             IsDataInitialized = true;
             OutputWriter.WriteMessageOnNewLine("Data read!");
         }
+
+        private static bool IsQueryForCoursePossible(string courseName)
+        {
+            if (_studentsByCourse.ContainsKey(courseName))
+            {
+                return true;
+            }
+            else
+            {
+                OutputWriter.DisplayException(ExceptionMessages.InexistingCourseInDataBase);
+            }
+
+            return true;
+        }
+
+        private static bool IsQueryForStudentPossiblе(string courseName, string studentUserName)
+        {
+            if (IsQueryForCoursePossible(courseName) && _studentsByCourse[courseName].ContainsKey(studentUserName))
+            {
+                return true;
+            }
+            else
+            {
+                OutputWriter.DisplayException(ExceptionMessages.InexistingStudentInDataBase);
+            }
+
+            return false;
+        }
     }
 }
