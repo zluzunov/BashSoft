@@ -4,7 +4,8 @@
     {
         static void Main()
         {
-            IOManager.TraverseDirectory(@"D:\Zlatyo");
+            StudentsRepository.InitializeData();
+            StudentsRepository.GetStudentScoresFromCourse("Unity", "Ivan");
         }
     }
 }

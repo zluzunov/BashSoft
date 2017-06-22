@@ -16,7 +16,7 @@
 
         public static void InitializeData()
         {
-            if (IsDataInitialized)
+            if (!IsDataInitialized)
             {
                 OutputWriter.WriteMessageOnNewLine("Reading data ...");
                 _studentsByCourse = new Dictionary<string, Dictionary<string, List<int>>>();
@@ -84,6 +84,28 @@
             }
 
             return false;
+        }
+
+        public static void GetStudentScoresFromCourse(string courseName, string username)
+        {
+            if (IsQueryForStudentPossiblе(courseName, username))
+            {
+                OutputWriter.PrintStudent(new KeyValuePair<string, List<int>>(username, _studentsByCourse[courseName][username]));
+            }
+        }
+
+
+
+        public static void GetAllStudentsFromCourse(string courseName)
+        {
+            if (IsQueryForCoursePossible(courseName))
+            {
+                OutputWriter.WriteMessageOnNewLine($"{courseName}");
+                foreach (var studentMarksEntry in _studentsByCourse[courseName])
+                {
+                    OutputWriter.PrintStudent(studentMarksEntry);
+                }
+            }
         }
     }
 }
