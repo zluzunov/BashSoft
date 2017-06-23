@@ -4,8 +4,7 @@
     {
         static void Main()
         {
-            IOManager.ChangeCurrentDirectoryAbsolute(@"C:\Windows");
-            IOManager.TraverseDirectory(20);
+            Tester.CompareContent(@"..\..\04-actual.txt",@"..\..\04-expected.txt");
         }
     }
 }

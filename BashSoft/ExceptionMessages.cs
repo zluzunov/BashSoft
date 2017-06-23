@@ -12,5 +12,7 @@
 
         public const string UnauthorizedAccessExceptionMessage =
             "The folder/file you are trying to get access needs a higher level of rights than you currently have.";
+
+        public const string ComparisonOfFilesWithDifferentSizes = "Files not of equal size, certain mismatch.";
     }
 }
