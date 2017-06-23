@@ -4,7 +4,8 @@
     {
         static void Main()
         {
-            IOManager.TraverseDirectory(3);
+            IOManager.ChangeCurrentDirectoryAbsolute(@"C:\Windows");
+            IOManager.TraverseDirectory(20);
         }
     }
 }

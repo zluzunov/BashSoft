@@ -1,5 +1,6 @@
 ﻿namespace BashSoft
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
 
@@ -7,6 +8,7 @@
     {
         private const char Separator = '\\';
         private const string UpperDirecotryString = "..";
+        private const char AlignCharacter = '-';
 
         public static void TraverseDirectory(int depth)
         {
@@ -25,22 +27,31 @@
                     break;
                 }
 
-                OutputWriter.WriteMessageOnNewLine($"{new string('-', identation)}{currentPath}");
+                OutputWriter.WriteMessageOnNewLine($"{new string(AlignCharacter, identation)}{currentPath}");
 
-                foreach (var file in Directory.GetFiles(currentPath))
+                try
                 {
-                    int indexOfLastSlash = file.LastIndexOf(Separator);
-                    string fileName = file.Substring(indexOfLastSlash);
-                    OutputWriter.WriteMessageOnNewLine(new string('-', indexOfLastSlash) + fileName);
+                    foreach (var file in Directory.GetFiles(currentPath))
+                    {
+                        int indexOfLastSlash = file.LastIndexOf(Separator);
+                        string fileName = file.Substring(indexOfLastSlash);
+                        OutputWriter.WriteMessageOnNewLine(new string(AlignCharacter, indexOfLastSlash) + fileName);
+                    }
+
+                    string identationString = new string(AlignCharacter, identation);
+                    string directoryString = $"{identationString}{currentPath}";
+                    OutputWriter.WriteMessageOnNewLine(directoryString);
+
+                    foreach (string directoryPath in Directory.GetDirectories(currentPath))
+                    {
+                        subfolders.Enqueue(directoryPath);
+                    }
+
                 }
-
-                string identationString = new string('-', identation);
-                string directoryString = $"{identationString}{currentPath}";
-                OutputWriter.WriteMessageOnNewLine(directoryString);
-
-                foreach (string directoryPath in Directory.GetDirectories(currentPath))
+                catch (UnauthorizedAccessException)
                 {
-                    subfolders.Enqueue(directoryPath);
+                    OutputWriter.DisplayException(ExceptionMessages.UnauthorizedAccessExceptionMessage);
+                    throw;
                 }
             }
         }
@@ -68,7 +79,7 @@
             }
         }
 
-        private static void ChangeCurrentDirectoryAbsolute(string absolutePath)
+        public static void ChangeCurrentDirectoryAbsolute(string absolutePath)
         {
             if (!Directory.Exists(absolutePath))
             {
