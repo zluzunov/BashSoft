@@ -51,7 +51,6 @@
                 catch (UnauthorizedAccessException)
                 {
                     OutputWriter.DisplayException(ExceptionMessages.UnauthorizedAccessExceptionMessage);
-                    throw;
                 }
             }
         }
@@ -59,17 +58,36 @@
         public static void CreateDirectoryInCurrentFolder(string name)
         {
             string path = SessionData.CurrentPath + Separator + name;
-            Directory.CreateDirectory(path);
+
+            try
+            {
+                Directory.CreateDirectory(path);
+            }
+            catch (ArgumentException)
+            {
+                OutputWriter.DisplayException(ExceptionMessages.ForbiddenSymbolsContaineInName);
+            }
+
+            
         }
 
         public static void ChangeCurrentDirectoryRelative(string relativePath)
         {
             if (relativePath == UpperDirecotryString)
             {
-                string currentPath = SessionData.CurrentPath;
-                int indexOfLastSlash = currentPath.LastIndexOf(Separator);
-                string newPath = currentPath.Substring(0, indexOfLastSlash);
-                SessionData.CurrentPath = newPath;
+                try
+                {
+                    string currentPath = SessionData.CurrentPath;
+                    int indexOfLastSlash = currentPath.LastIndexOf(Separator);
+                    string newPath = currentPath.Substring(0, indexOfLastSlash);
+                    SessionData.CurrentPath = newPath;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    OutputWriter.DisplayException(ExceptionMessages.UnableToGoHigherInPartitionHierarchy);
+                }
+
+                
             }
             else
             {

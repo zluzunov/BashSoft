@@ -16,17 +16,25 @@
         {
             OutputWriter.WriteMessageOnNewLine(ReadingFilesMessage);
 
-            string mismatchPath = GetMismatchPath(expectedOutputPath);
+            try
+            {
+                string mismatchPath = GetMismatchPath(expectedOutputPath);
 
-            string[] actualOutputLines = File.ReadAllLines(userOutputPath);
-            string[] expectedOutputLines = File.ReadAllLines(expectedOutputPath);
+                string[] actualOutputLines = File.ReadAllLines(userOutputPath);
+                string[] expectedOutputLines = File.ReadAllLines(expectedOutputPath);
 
-            bool hasMismatch;
-            string[] mismatches = GetLineWithPossibleMismatches(actualOutputLines, expectedOutputLines, out hasMismatch);
+                bool hasMismatch;
+                string[] mismatches = GetLineWithPossibleMismatches(actualOutputLines, expectedOutputLines, out hasMismatch);
 
-            PrintOutput(mismatches, hasMismatch, mismatchPath);
-            var filesRead = FilesReadMessage;
-            OutputWriter.WriteMessageOnNewLine(filesRead);
+                PrintOutput(mismatches, hasMismatch, mismatchPath);
+                var filesRead = FilesReadMessage;
+                OutputWriter.WriteMessageOnNewLine(filesRead);
+            }
+            catch (FileNotFoundException)
+            {
+                OutputWriter.DisplayException(ExceptionMessages.FileNotFound);
+            }
+            
         }
 
         private static void PrintOutput(string[] mismatches, bool hasMismatch, string mismatchPath)
@@ -38,7 +46,15 @@
                     OutputWriter.WriteMessageOnNewLine(line);
                 }
 
-                File.WriteAllLines(mismatchPath, mismatches);
+                try
+                {
+                    File.WriteAllLines(mismatchPath, mismatches);
+
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    OutputWriter.DisplayException(ExceptionMessages.InvalidPath);
+                }
             }
             else
             {
