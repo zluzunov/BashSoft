@@ -14,13 +14,13 @@
 
         private static Dictionary<string, Dictionary<string, List<int>>> _studentsByCourse;
 
-        public static void InitializeData()
+        public static void InitializeData(string inputFile)
         {
             if (!IsDataInitialized)
             {
                 OutputWriter.WriteMessageOnNewLine("Reading data ...");
                 _studentsByCourse = new Dictionary<string, Dictionary<string, List<int>>>();
-                ReadData();
+                ReadData(inputFile);
             }
             else
             {
@@ -28,10 +28,8 @@
             }
         }
 
-        private static void ReadData()
+        private static void ReadData(string input)
         {
-            string input = Console.ReadLine();
-
             while (!string.IsNullOrEmpty(input))
             {
                 string[] tokens = input.Split(InputSeparator);
