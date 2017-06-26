@@ -1,9 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BashSoft", "BashSoft\BashSoft.csproj", "{7283FAF6-B676-4507-B150-0C876D74C4EC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3C7B454B-5943-479E-8F11-C891DA43406D}"
+	ProjectSection(SolutionItems) = preProject
+		BashSoft\03-test1.txt = BashSoft\03-test1.txt
+		BashSoft\03-test2.txt = BashSoft\03-test2.txt
+		BashSoft\03-test3.txt = BashSoft\03-test3.txt
+		BashSoft\04-actual.txt = BashSoft\04-actual.txt
+		BashSoft\04-expected.txt = BashSoft\04-expected.txt
+		BashSoft\05-dataNew.txt = BashSoft\05-dataNew.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

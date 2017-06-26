@@ -2,13 +2,16 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Text.RegularExpressions;
 
     public static class StudentsRepository
     {
         private const char InputSeparator = ' ';
-        private const int InputCourseIndex = 0;
-        private const int InputStudentIndex = 1;
-        private const int InputMarkIndex = 2;
+        private const string DirectorySeparator = "\\";
+        private const string RegExGroupNameCourse = "course";
+        private const string RegExGroupNameStudent = "student";
+        private const string RegExGroupNameMark = "mark";
 
         public static bool IsDataInitialized = false;
 
@@ -28,28 +31,49 @@
             }
         }
 
-        private static void ReadData(string input)
+        private static void ReadData(string fileName)
         {
-            while (!string.IsNullOrEmpty(input))
+            string path = SessionData.CurrentPath + DirectorySeparator + fileName;
+
+            if (File.Exists(path))
             {
-                string[] tokens = input.Split(InputSeparator);
+                string pattern = @"(?<" + RegExGroupNameCourse
+                    + @">[A-Z][A-Za-z+#]*_[A-Z][a-z]{2}_\d{4})\s+(?<" + RegExGroupNameStudent
+                    + @">[A-Z][a-z]{0,3}\d{2}_\d{2,4})\s+(?<" + RegExGroupNameMark
+                    + @">\d+)";
+                Regex rgx = new Regex(pattern);
+                string[] allInputLines = File.ReadAllLines(path);
 
-                string course = tokens[InputCourseIndex];
-                string student = tokens[InputStudentIndex];
-                int mark = int.Parse(tokens[InputMarkIndex]);
-
-                if (!_studentsByCourse.ContainsKey(course))
+                for (int line = 0; line < allInputLines.Length; line++)
                 {
-                    _studentsByCourse.Add(course, new Dictionary<string, List<int>>());
-                }
+                    if (!string.IsNullOrEmpty(allInputLines[line]) && rgx.IsMatch(allInputLines[line]))
+                    {
+                        Match currentMatch = rgx.Match(allInputLines[line]);
+                        string courseName = currentMatch.Groups[RegExGroupNameCourse].Value;
+                        string username = currentMatch.Groups[RegExGroupNameStudent].Value;
+                        int studentScoreOnTask;
+                        bool hasParsedScore = int.TryParse(currentMatch.Groups[RegExGroupNameMark].Value, out studentScoreOnTask);
 
-                if (!_studentsByCourse[course].ContainsKey(student))
-                {
-                    _studentsByCourse[course].Add(student, new List<int>());
-                }
+                        if (hasParsedScore && studentScoreOnTask >= 0 && studentScoreOnTask <= 100)
+                        {
+                            if (!_studentsByCourse.ContainsKey(courseName))
+                            {
+                                _studentsByCourse.Add(courseName, new Dictionary<string, List<int>>());
+                            }
 
-                _studentsByCourse[course][student].Add(mark);
-                input = Console.ReadLine();
+                            if (!_studentsByCourse[courseName].ContainsKey(username))
+                            {
+                                _studentsByCourse[courseName].Add(username, new List<int>());
+                            }
+
+                            _studentsByCourse[courseName][username].Add(studentScoreOnTask);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                OutputWriter.DisplayException(ExceptionMessages.InvalidPath);
             }
 
             IsDataInitialized = true;
